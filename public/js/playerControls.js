@@ -22,11 +22,11 @@ THREE.PlayerControls = function () {
                 break;
             case 40: // down
             case 83: // s
-                this.position.z = stepAmount * 0.75;
+                this.position.z = stepAmount;
                 break;
             case 37: // left
             case 65: // a
-                this.position.x = -stepAmount * 0.75;
+                this.position.x = -stepAmount;
                 break;
             case 39: // right
             case 68: // d
