@@ -8,8 +8,16 @@
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cuinjune/battle-square.git"
+  },
+  "author": "Zack Lee",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cuinjune/battle-square/issues"
+  },
+  "homepage": "https://github.com/cuinjune/battle-square#readme",
   "dependencies": {
     "express": "^4.17.1",
     "socket.io": "^2.3.0"
