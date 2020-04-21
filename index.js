@@ -28,7 +28,7 @@ console.log('Server is running localhost on port: ' + PORT);
 // Socket.io
 const io = require('socket.io')({
   "transports": ["xhr-polling"],
-  "polling duration": 100
+  "polling duration": 1000
 }).listen(server);
 // io.set("transports", ["xhr-polling"]);
 // io.set("polling duration", 10);
