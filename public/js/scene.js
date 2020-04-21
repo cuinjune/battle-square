@@ -7,12 +7,15 @@ class Scene {
 		_controls,
 		_movementCallback) {
 
+		const frameRate = 30;
+		this.interval = 1000 / frameRate;
+		this.startTime = 0;
+
 		this.controls = _controls;
 		this.movementCallback = _movementCallback;
 
 		//THREE scene
 		this.scene = new THREE.Scene();
-		this.sendStats = false;
 
 		//Utility
 		this.width = _width;
@@ -48,7 +51,6 @@ class Scene {
 
 		// Start the loop
 		this.update();
-		this.sendStats = true; //why this is needed?
 	}
 
 
@@ -299,18 +301,24 @@ class Scene {
 	}
 
 	update(time) {
-
-		// update player
-		this.updatePlayer(time);
-
-		// update camera
-		this.updateCamera();
-
-		// send movement stats to the socket server
-		if (this.sendStats) {
-			this.movementCallback();
+		if (this.startTime == 0) {
+			this.startTime = time || 0;
 		}
-		this.renderer.render(this.scene, this.camera);
+		const elapsedTime = time - this.startTime;
+		if (elapsedTime >= this.interval) {
+			this.startTime = 0;
+
+			// update player
+			this.updatePlayer(time);
+
+			// update camera
+			this.updateCamera();
+
+			this.movementCallback();
+
+			this.renderer.render(this.scene, this.camera);
+		}
+		
 		requestAnimationFrame((time) => this.update(time));
 	}
 

@@ -9,9 +9,9 @@ THREE.PlayerControls = function () {
     this.leftPunchStartTime = 0;
     this.rightPunchStartTime = 0;
     const PI_2 = Math.PI * 0.5;
-    const stepAmount = 0.05;
-    const rotationAmountX = 0.002;
-    const rotationAmountY = 0.005;
+    const stepAmount = 0.05 * 2;
+    const rotationAmountX = 0.002 * 2;
+    const rotationAmountY = 0.005 * 2;
 
     document.onkeydown = function myFunction() {
         if (this.enabled === false) return;
