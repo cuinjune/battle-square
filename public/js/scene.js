@@ -7,7 +7,7 @@ class Scene {
 		_controls,
 		_movementCallback) {
 
-		const frameRate = 60;
+		const frameRate = 30;
 		this.interval = 1000 / frameRate;
 		this.startTime = 0;
 
