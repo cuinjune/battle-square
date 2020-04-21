@@ -65,39 +65,43 @@ class Scene {
 	//////////////////////////////////////////////////////////////////////
 	// Clients
 
+	getRandomRange(from, to) {
+		return Math.random() * (to - from) + from;
+	}
+
 	getPlayerData() {
 		const data = {};
 
 		// create player
-		const bodyWidth = 0.25;
-		const bodyHeight = 0.4;
-		const bodyDepth = 0.15;
+		const bodyWidth = 0.25 + this.getRandomRange(-0.05, 0.05);
+		const bodyHeight = 0.4 + this.getRandomRange(-0.05, 0.05);
+		const bodyDepth = 0.15 + this.getRandomRange(-0.05, 0.05);
 
 		const bodyWidthHalf = bodyWidth * 0.5;
 		const bodyHeightHalf = bodyHeight * 0.5;
 
-		const headWidth = bodyWidth * 0.5;
-		const headHeight = headWidth;
-		const headDepth = bodyDepth * 0.7;
+		const headWidth = bodyWidth * 0.5 + this.getRandomRange(-0.05, 0.05);
+		const headHeight = headWidth + this.getRandomRange(-0.05, 0.05);
+		const headDepth = bodyDepth * 0.7 + this.getRandomRange(-0.05, 0.05);
 		const headHeightHalf = headHeight * 0.5;
 
-		const armWidth = bodyWidth * 0.3;
-		const armHeight = bodyHeight * 0.9;
-		const armDepth = bodyDepth * 0.5;
+		const armWidth = bodyWidth * 0.3 + this.getRandomRange(-0.05, 0.05);
+		const armHeight = bodyHeight * 0.9 + this.getRandomRange(-0.05, 0.05);
+		const armDepth = bodyDepth * 0.5 + this.getRandomRange(-0.05, 0.05);
 
 		const armWidthHalf = armWidth * 0.5;
 		const armHeightHalf = armHeight * 0.5;
 		const armRotationOffset = armHeightHalf * 0.8;
 
-		const legWidth = bodyWidth * 0.4;
-		const legHeight = bodyHeight * 1.1;
-		const legDepth = bodyDepth * 0.5;
+		const legWidth = bodyWidth * 0.4 + this.getRandomRange(-0.05, 0.05);
+		const legHeight = bodyHeight * 1.1 + this.getRandomRange(-0.05, 0.05);
+		const legDepth = bodyDepth * 0.5 + this.getRandomRange(-0.05, 0.05);
 
 		const legWidthHalf = legWidth * 0.5;
 		const legHeightHalf = legHeight * 0.5;
 		const legRotationOffset = legHeightHalf * 0.8;
 
-		const playerMaterial = new THREE.MeshLambertMaterial({ color: 0x9797CE });
+		const playerMaterial = new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff }); //0x9797CE
 
 		// body
 		const body = new THREE.Mesh(new THREE.CubeGeometry(bodyWidth, bodyHeight, bodyDepth), playerMaterial);
@@ -310,7 +314,7 @@ class Scene {
 			this.shouldSend = true;
 		}
 		this.renderer.render(this.scene, this.camera);
-		
+
 		requestAnimationFrame((time) => this.update(time));
 	}
 
