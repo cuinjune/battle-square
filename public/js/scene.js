@@ -7,12 +7,9 @@ class Scene {
 		_controls,
 		_movementCallback) {
 
-		const frameRate = 30;
-		this.interval = 1000 / frameRate;
-		this.startTime = 0;
-
 		this.controls = _controls;
 		this.movementCallback = _movementCallback;
+		this.shouldSend = false; //way to not use this?
 
 		//THREE scene
 		this.scene = new THREE.Scene();
@@ -156,8 +153,8 @@ class Scene {
 
 		// add the player to the scene
 		data.player = new THREE.Group();
-		data.initPlayerPositionY = bodyHeightHalf + legHeight;
-		data.player.position.y = data.initPlayerPositionY;
+		this.initPlayerPositionY = bodyHeightHalf + legHeight;
+		data.player.position.y = this.initPlayerPositionY;
 		data.player.add(body);
 		return data;
 	}
@@ -188,7 +185,6 @@ class Scene {
 		for (let _id in _clientProps) {
 			if (_id != id) {
 				// way to simplify the copying process?
-				clients[_id].data.initPlayerPositionY = _clientProps[_id].initPlayerPositionY;
 				clients[_id].data.player.position.set(_clientProps[_id].player.position[0], _clientProps[_id].player.position[1], _clientProps[_id].player.position[2]);
 				clients[_id].data.player.rotation.set(_clientProps[_id].player.rotation[0], _clientProps[_id].player.rotation[1], _clientProps[_id].player.rotation[2]);
 				clients[_id].data.leftArmPivot.rotation.set(_clientProps[_id].leftArmPivot.rotation[0], _clientProps[_id].leftArmPivot.rotation[1], _clientProps[_id].leftArmPivot.rotation[2]);
@@ -204,7 +200,6 @@ class Scene {
 	// Interaction 🤾‍♀️
 	getThisPlayerData() {
 		return [
-			this.data.player.initPlayerPositionY,
 			[this.data.player.position.x, this.data.player.position.y, this.data.player.position.z],
 			[this.data.player.rotation.x, this.data.player.rotation.y, this.data.player.rotation.z],
 			[this.data.leftArmPivot.rotation.x, this.data.leftArmPivot.rotation.y, this.data.leftArmPivot.rotation.z],
@@ -250,9 +245,9 @@ class Scene {
 			}
 			const elapsedTime = time - this.controls.jumpStartTime;
 			const deg = elapsedTime * jumpSpeed;
-			this.data.player.position.y = this.data.initPlayerPositionY + Math.sin(THREE.Math.degToRad(deg)) * jumpHeight;
+			this.data.player.position.y = this.initPlayerPositionY + Math.sin(THREE.Math.degToRad(deg)) * jumpHeight;
 			if (deg >= 180) {
-				this.data.player.position.y = this.data.initPlayerPositionY;
+				this.data.player.position.y = this.initPlayerPositionY;
 				this.controls.shouldJump = false;
 			}
 		}
@@ -301,23 +296,20 @@ class Scene {
 	}
 
 	update(time) {
-		if (this.startTime == 0) {
-			this.startTime = time || 0;
-		}
-		const elapsedTime = time - this.startTime;
-		if (elapsedTime >= this.interval) {
-			this.startTime = 0;
+		// update player
+		this.updatePlayer(time);
 
-			// update player
-			this.updatePlayer(time);
+		// update camera
+		this.updateCamera();
 
-			// update camera
-			this.updateCamera();
-
+		// send movement to server to update clients data
+		if (this.shouldSend) {
 			this.movementCallback();
-
-			this.renderer.render(this.scene, this.camera);
 		}
+		else {
+			this.shouldSend = true;
+		}
+		this.renderer.render(this.scene, this.camera);
 		
 		requestAnimationFrame((time) => this.update(time));
 	}

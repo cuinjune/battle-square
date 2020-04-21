@@ -27,8 +27,8 @@ console.log('Server is running localhost on port: ' + PORT);
 
 // Socket.io
 const io = require('socket.io')({
-  "transports": ["xhr-polling"],
-  "polling duration": 0
+  // "transports": ["xhr-polling"],
+  // "polling duration": 0
 }).listen(server);
 
 let clients = {};
@@ -41,7 +41,6 @@ io.on('connection', client => {
   //Add a new client indexed by his id
   clients[client.id] = {
     // could these be threejs objects? (e.g. THREE.Object3D)
-    initPlayerPositionY: 0,
     player: {
       position: [0, 0, 0],
       rotation: [0, 0, 0]
@@ -80,13 +79,12 @@ io.on('connection', client => {
   client.on('move', (data) => {
     if (clients[client.id]) {
       // way to simplify the copying process?
-      clients[client.id].initPlayerPositionY = data[0];
-      clients[client.id].player.position = data[1];
-      clients[client.id].player.rotation = data[2];
-      clients[client.id].leftArmPivot.rotation = data[3];
-      clients[client.id].rightArmPivot.rotation = data[4];
-      clients[client.id].leftLegPivot.rotation = data[5];
-      clients[client.id].rightLegPivot.rotation = data[6];
+      clients[client.id].player.position = data[0];
+      clients[client.id].player.rotation = data[1];
+      clients[client.id].leftArmPivot.rotation = data[2];
+      clients[client.id].rightArmPivot.rotation = data[3];
+      clients[client.id].leftLegPivot.rotation = data[4];
+      clients[client.id].rightLegPivot.rotation = data[5];
     }
     io.sockets.emit('userPositions', clients);
   });
