@@ -41,6 +41,11 @@ npm start
 ## Tools & Libraries used
 Three.js, Socket.io, Seedrandom.js, Node.js, Express.js
 
+## References
+* https://github.com/AidanNelson/threejs-webrtc
+* https://github.com/inkfood/Smooth-camera-with-ThreeJS
+* https://github.com/mrdoob/three.js/blob/dev/examples/misc_controls_pointerlock.html
+
 ## Reporting bugs
 Please post an [issue](https://github.com/cuinjune/battle-square/issues) if you face any problem using the app.
 
