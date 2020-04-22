@@ -19,10 +19,9 @@ class Scene {
 
 		// renderer
 		this.renderer = new THREE.WebGLRenderer({ antialias: true });
-		this.renderer.shadowMap.enabled = true; 
 		this.renderer.setClearColor(new THREE.Color(_clearColor));
 		this.renderer.setSize(this.width, this.height);
-		
+
 		// push the canvas to the DOM
 		_domElement.append(this.renderer.domElement);
 
@@ -36,8 +35,7 @@ class Scene {
 		});
 
 		// add lights
-		const light = new THREE.PointLight(0xffffff, 1, 0, 2);
-		light.castShadow = true; 
+		const light = new THREE.HemisphereLight(0xffffff, 0x000000, 1);
 		light.position.set(5, 10, 5);
 		this.scene.add(light);
 
@@ -46,7 +44,6 @@ class Scene {
 		const geometry = new THREE.PlaneGeometry(50, 50, 1);
 		const material = new THREE.MeshLambertMaterial({ color: 0xffffbb });
 		const plane = new THREE.Mesh(geometry, material);
-		plane.receiveShadow = true;
 		plane.rotation.x = THREE.Math.degToRad(-90);
 		this.scene.add(plane);
 
@@ -99,11 +96,9 @@ class Scene {
 
 		// body
 		const body = new THREE.Mesh(new THREE.CubeGeometry(bodyWidth, bodyHeight, bodyDepth), playerMaterial);
-		body.castShadow = true; 
 
 		// head
 		const head = new THREE.Mesh(new THREE.CubeGeometry(headWidth, headHeight, headDepth), playerMaterial);
-		head.castShadow = true; 
 		head.position.y = bodyHeightHalf + headHeightHalf;
 		body.add(head);
 
@@ -113,7 +108,6 @@ class Scene {
 
 		// left arm
 		const leftArm = new THREE.Mesh(armGeometry, playerMaterial);
-		leftArm.castShadow = true;
 		leftArm.position.set(-bodyWidthHalf - armWidthHalf, armRotationOffset, 0);
 		leftArm.rotation.x = THREE.Math.degToRad(90);
 		obj.leftArmPivot = new THREE.Object3D();
@@ -123,7 +117,6 @@ class Scene {
 
 		// right arm
 		const rightArm = new THREE.Mesh(armGeometry, playerMaterial);
-		rightArm.castShadow = true;
 		rightArm.position.set(bodyWidthHalf + armWidthHalf, armRotationOffset, 0);
 		rightArm.rotation.x = THREE.Math.degToRad(90);
 		obj.rightArmPivot = new THREE.Object3D();
@@ -137,7 +130,6 @@ class Scene {
 
 		// left leg
 		const leftLeg = new THREE.Mesh(legGeometry, playerMaterial);
-		leftLeg.castShadow = true;
 		leftLeg.position.set(-bodyWidthHalf + legWidthHalf, legRotationOffset, 0);
 		leftLeg.rotation.x = THREE.Math.degToRad(90);
 		obj.leftLegPivot = new THREE.Object3D();
@@ -147,7 +139,6 @@ class Scene {
 
 		// right leg
 		const rightLeg = new THREE.Mesh(legGeometry, playerMaterial);
-		rightLeg.castShadow = true;
 		rightLeg.position.set(bodyWidthHalf - legWidthHalf, legRotationOffset, 0);
 		rightLeg.rotation.x = THREE.Math.degToRad(90);
 		obj.rightLegPivot = new THREE.Object3D();
