@@ -8,7 +8,7 @@ The goal is to build a simple, minimal, and fun game that anyone can easily play
 Here's the [Live Demo on Glitch](https://cuinjune-battle-square.glitch.me/).
 
 ## How to play
-* Enter the player name and press start button. (The player's look will be determined by the name you give to it)
+* Enter the player name and press the start button. (The player's look will be determined by the name you give to it)
 * `W, A, S, D` keys move the player forward, left, backward, and right.
 * `Space` key makes the player jump.
 * `Mouse` movement makes the player look around.
