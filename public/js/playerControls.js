@@ -96,10 +96,4 @@ THREE.PlayerControls = function () {
         if (this.rotation.x < -0.5) this.rotation.x = -0.5;
         if (this.rotation.x > 0.5) this.rotation.x = 0.5;
     }.bind(this)
-	
-
-
-
-
-
 };

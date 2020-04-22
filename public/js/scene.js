@@ -25,6 +25,15 @@ class Scene {
 		// push the canvas to the DOM
 		_domElement.append(this.renderer.domElement);
 
+		// add event listeners
+		window.addEventListener("resize", () => {
+			this.width = window.innerWidth;
+			this.height = window.innerHeight;
+			this.renderer.setSize(this.width, this.height);
+			this.camera.aspect = this.width / this.height;
+			this.camera.updateProjectionMatrix();
+		});
+
 		// add lights
 		const light = new THREE.HemisphereLight(0xffffff, 0x000000, 1);
 		light.position.set(5, 10, 5);
@@ -348,17 +357,5 @@ class Scene {
 
 		// call update again
 		requestAnimationFrame((time) => this.update(time));
-	}
-
-	//////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////
-	// Event Handlers
-
-	onWindowResize(e) {
-		this.width = window.innerWidth;
-		this.height = Math.floor(window.innerHeight - (window.innerHeight * 0.3));
-		this.camera.aspect = this.width / this.height;
-		this.camera.updateProjectionMatrix();
-		this.renderer.setSize(this.width, this.height);
 	}
 }

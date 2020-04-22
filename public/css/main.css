@@ -1,6 +1,7 @@
 html, body {
     padding: 0px;
     margin: 0px;
+    font-family: Helvetica, sans-serif;
     overflow: hidden;
 }
 
@@ -12,15 +13,11 @@ html, body {
     text-decoration: underline;
 }
 
-#title a {
-    color: grey;
-}
-
 #blocker {
     position: absolute;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.75);
 }
 
 #instructions {
@@ -38,7 +35,122 @@ html, body {
     -webkit-box-align: center;
     -moz-box-align: center;
     box-align: center;
-    color: #ffffff;
     text-align: center;
+    color: white;
     cursor: pointer;
+}
+
+#instructions_rows {
+    display: flex;
+    /* justify-content: center; */
+    flex-direction: column;
+    width: 500px;
+    height: 500px;
+    background-color: rgba(255, 255, 255, 0.05);
+    text-indent: 20%;
+}
+
+#instructions_row1 {
+    font-size: 40px;
+    text-align: center;
+    text-indent: 0px;
+    height: 220px;
+}
+
+#instructions_row2 {
+    font-size: 30px;
+    text-align: left;
+    height: 50px;
+}
+
+#instructions_row3 {
+    font-size: 30px;
+    text-align: left;
+    height: 50px;
+}
+
+#instructions_row4 {
+    font-size: 30px;
+    text-align: left;
+    height: 50px;
+}
+
+#instructions_row5 {
+    font-size: 30px;
+    text-align: left;
+    height: 50px;
+}
+
+#startScreen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to right bottom, #d16ba5, #c777b9, #ba83ca, #aa8fd8, #9a9ae1, #80abee, #67bbf3, #59c9f0, #62dde4, #8fedd0, #c7f8bf, #ffffbb);
+}
+
+#titleArea {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 5%;
+    color: white;
+    box-align: center;
+    text-align: center;
+    font-size: 45px;
+}
+
+#formArea {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    color: white;
+    box-align: center;
+    text-align: center;
+}
+
+#formArea_row1 {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin-top: -35px;
+    color: white;
+    box-align: center;
+    text-align: center;
+}
+
+#formArea_label {
+    font-size: 42px;
+}
+
+#formArea_row2 {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin-top: 70px;
+    color: white;
+    box-align: center;
+    text-align: center;
+}
+
+#formArea_input {
+    width: 300px;
+    height: 40px;
+    font-size: 30px;
+    text-indent: 0.2em;
+    color: rgb(75, 75, 75);
+    font-weight: bold;
+}
+
+#formArea_button {
+    margin-top: -1px;
+    margin-left: 12px;
+    width: 120px;
+    height: 48px;
+    font-size: 24px;
+    color: rgb(75, 75, 75);
+    font-weight: bold;
 }

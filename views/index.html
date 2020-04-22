@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="css/main.css" type="text/css" />
   <script src="socket.io.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
   <script src="js/playerControls.js"></script>
   <script src="js/scene.js"></script>
 </head>
@@ -15,9 +16,42 @@
 <body>
   <div id="blocker">
     <div id="instructions">
-      <span style="font-size:40px">Click to play</span>
-      <br />
-      (W, A, S, D = Move, SPACE = Jump, MOUSE = Look around, CLICK = Hit)
+      <div id="instructions_rows">
+        <div id="instructions_row1">
+          <h2>Click to play</h2>
+        </div>
+        <div id="instructions_row2">
+          <h5>W, A, S, D : Move</h5>
+        </div>
+        <div id="instructions_row3">
+          <h5>Space : Jump</h5>
+        </div>
+        <div id="instructions_row4">
+          <h5>Mouse : Look around</h5>
+        </div>
+        <div id="instructions_row5">
+          <h5>Click : Hit</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="startScreen">
+    <div id="titleArea">
+      <h1>BATTLE SQUARE</h1>
+    </div>
+    <div id="formArea">
+      <div id="formArea_row1">
+        <h3 id="formArea_label">Enter the player name</h3>
+      </div>
+      <div id="formArea_row2">
+        <div id="formArea_inputArea">
+          <input id="formArea_input" type="text" spellcheck="false" maxlength="25" value=""
+            onkeydown="return playerNameInputKeyDown(event)">
+        </div>
+        <div id="formArea_buttonArea">
+          <button id="formArea_button">START</button>
+        </div>
+      </div>
     </div>
   </div>
   <div id="gl_context"></div>

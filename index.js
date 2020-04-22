@@ -6,26 +6,26 @@ const app = express();
 const http = require('http').createServer(app);
 const PORT = 3000;
 
-// Handle data in a nice way
+// handle data in a nice way
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 const publicPath = path.resolve(`${__dirname}/public`);
 const socketioPath = path.resolve(`${__dirname}/node_modules/socket.io-client/dist`);
 
-// Set your static server
+// set your static server
 app.use(express.static(publicPath));
 app.use(express.static(socketioPath));
 
-// Views
+// views
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views/index.html'));
 });
 
-// Start listening
+// start listening
 const server = app.listen(PORT);
 console.log('Server is running localhost on port: ' + PORT);
 
-// Socket.io
+// socket.io
 const io = require('socket.io')({
   // "transports": ["xhr-polling"],
   // "polling duration": 0
@@ -33,13 +33,12 @@ const io = require('socket.io')({
 
 let clients = {};
 
-//Socket setup
+// socket setup
 io.on('connection', client => {
-
   console.log('User ' + client.id + ' connected, there are ' + io.engine.clientsCount + ' clients connected');
 
-  //Add a new client indexed by his id
-  clients[client.id] = { // better to use three.js types instead?
+  // add a new client indexed by his id
+  clients[client.id] = {
     bodySize: [0, 0, 0],
     headSize: [0, 0, 0],
     armSize: [0, 0, 0],
@@ -95,10 +94,8 @@ io.on('connection', client => {
 
   // handle the disconnection
   client.on('disconnect', () => {
-    // delete this client from the object
     delete clients[client.id];
     io.sockets.emit('userDisconnected', client.id);
     console.log('User ' + client.id + ' diconnected, there are ' + io.engine.clientsCount + ' clients connected');
   });
-
 });
