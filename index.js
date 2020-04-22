@@ -39,8 +39,12 @@ io.on('connection', client => {
   console.log('User ' + client.id + ' connected, there are ' + io.engine.clientsCount + ' clients connected');
 
   //Add a new client indexed by his id
-  clients[client.id] = {
-    // could these be threejs objects? (e.g. THREE.Object3D)
+  clients[client.id] = { // better to use three.js types instead?
+    bodySize: [0, 0, 0],
+    headSize: [0, 0, 0],
+    armSize: [0, 0, 0],
+    legSize: [0, 0, 0],
+    color: [0, 0, 0],
     player: {
       position: [0, 0, 0],
       rotation: [0, 0, 0]
@@ -59,26 +63,26 @@ io.on('connection', client => {
     }
   }
 
-  //Make sure to send the client it's ID / number of Clients / total IDs
-  client.emit('introduction', client.id, io.engine.clientsCount, Object.keys(clients));
+  // SENDERS (client.emit(): sending to sender-client only, io.sockets.emit(): send to all connected clients)
 
-  //Update everyone that the number of users has changed
-  io.sockets.emit('newUserConnected', io.engine.clientsCount, client.id, Object.keys(clients));
+  // make sure to send clients, his ID, and a list of all keys
+  client.emit('introduction', clients, client.id, Object.keys(clients));
 
-  //Handle the disconnection
-  client.on('disconnect', () => {
-    //Delete this client from the object
-    delete clients[client.id];
-    io.sockets.emit('userDisconnected', io.engine.clientsCount, client.id, Object.keys(clients));
-    console.log('User ' + client.id + ' diconnected, there are ' + io.engine.clientsCount + ' clients connected');
+  // RECEIVERS
+  client.on('look', (data) => {
+    if (clients[client.id]) {
+      clients[client.id].bodySize = data[0];
+      clients[client.id].headSize = data[1];
+      clients[client.id].armSize = data[2];
+      clients[client.id].legSize = data[3];
+      clients[client.id].color = data[4];
+      // update everyone that the number of users has changed
+      io.sockets.emit('newUserConnected', clients[client.id], io.engine.clientsCount, client.id);
+    }
   });
-
-  // also give the client all existing clients positions:
-  client.emit('userPositions', clients);
 
   client.on('move', (data) => {
     if (clients[client.id]) {
-      // way to simplify the copying process?
       clients[client.id].player.position = data[0];
       clients[client.id].player.rotation = data[1];
       clients[client.id].leftArmPivot.rotation = data[2];
@@ -86,6 +90,15 @@ io.on('connection', client => {
       clients[client.id].leftLegPivot.rotation = data[4];
       clients[client.id].rightLegPivot.rotation = data[5];
     }
-    io.sockets.emit('userPositions', clients);
+    client.emit('userMoves', clients); // send back to the sender
   });
+
+  // handle the disconnection
+  client.on('disconnect', () => {
+    // delete this client from the object
+    delete clients[client.id];
+    io.sockets.emit('userDisconnected', client.id);
+    console.log('User ' + client.id + ' diconnected, there are ' + io.engine.clientsCount + ' clients connected');
+  });
+
 });
