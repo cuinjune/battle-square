@@ -16,16 +16,16 @@ Here's the [Live Demo on Glitch](https://cuinjune-battle-square.glitch.me/).
 * Let your friends join and play together.
 
 ## Future plans
-* Show names of the connected players.
+* Show the names of the connected players.
 * Design the background area. (e.g. walls, boxes)
 * Implement how the player interacts with the background objects.
 * Implement how players interact with each other.
-* Add an energy status bar for each players.
+* Add an energy status bar for each player.
 * Rank players by the number of kills.
 * Add the text chatting feature.
 * Apply shadow to the world.
 * Add music and sound.
-* Add items that appear on random locations. (e.g. potion, shield, speed up, power up, gun, etc) 
+* Add items that appear in random locations. (e.g. potion, shield, speed up, power up, gun, etc) 
 
 ## Setup
 1. Installation of node.js is required. Follow [this guide](https://github.com/itp-dwd/2020-spring/blob/master/guides/installing-nodejs.md) to install it.
