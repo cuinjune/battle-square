@@ -219,12 +219,19 @@ class Scene {
 	updateClientMoves(_clientProps) {
 		for (let _id in _clientProps) {
 			if (_id != id) {
-				clients[_id].player.position.set(_clientProps[_id].player.position[0], _clientProps[_id].player.position[1], _clientProps[_id].player.position[2]);
-				clients[_id].player.rotation.set(_clientProps[_id].player.rotation[0], _clientProps[_id].player.rotation[1], _clientProps[_id].player.rotation[2]);
-				clients[_id].leftArmPivot.rotation.set(_clientProps[_id].leftArmPivot.rotation[0], _clientProps[_id].leftArmPivot.rotation[1], _clientProps[_id].leftArmPivot.rotation[2]);
-				clients[_id].rightArmPivot.rotation.set(_clientProps[_id].rightArmPivot.rotation[0], _clientProps[_id].rightArmPivot.rotation[1], _clientProps[_id].rightArmPivot.rotation[2]);
-				clients[_id].leftLegPivot.rotation.set(_clientProps[_id].leftLegPivot.rotation[0], _clientProps[_id].leftLegPivot.rotation[1], _clientProps[_id].leftLegPivot.rotation[2]);
-				clients[_id].rightLegPivot.rotation.set(_clientProps[_id].rightLegPivot.rotation[0], _clientProps[_id].rightLegPivot.rotation[1], _clientProps[_id].rightLegPivot.rotation[2]);
+				const lerpAmount = 0.5;
+				const playerPosition = new THREE.Vector3().fromArray(_clientProps[_id].player.position);
+				const playerQuaternion = new THREE.Quaternion().fromArray(_clientProps[_id].player.quaternion);
+				const leftArmPivotQuaternion = new THREE.Quaternion().fromArray(_clientProps[_id].leftArmPivot.quaternion);
+				const rightArmPivotQuaternion = new THREE.Quaternion().fromArray(_clientProps[_id].rightArmPivot.quaternion);
+				const leftLegPivotQuaternion = new THREE.Quaternion().fromArray(_clientProps[_id].leftLegPivot.quaternion);
+				const rightLegPivotQuaternion = new THREE.Quaternion().fromArray(_clientProps[_id].rightLegPivot.quaternion);
+				clients[_id].player.position.lerp(playerPosition, lerpAmount);
+				clients[_id].player.quaternion.slerp(playerQuaternion, lerpAmount);
+				clients[_id].leftArmPivot.quaternion.slerp(leftArmPivotQuaternion, lerpAmount);
+				clients[_id].rightArmPivot.quaternion.slerp(rightArmPivotQuaternion, lerpAmount);
+				clients[_id].leftLegPivot.quaternion.slerp(leftLegPivotQuaternion, lerpAmount);
+				clients[_id].rightLegPivot.quaternion.slerp(rightLegPivotQuaternion, lerpAmount);
 			}
 		}
 	}
@@ -247,11 +254,11 @@ class Scene {
 	getPlayerMove() {
 		return [
 			[this.player.position.x, this.player.position.y, this.player.position.z],
-			[this.player.rotation.x, this.player.rotation.y, this.player.rotation.z],
-			[this.leftArmPivot.rotation.x, this.leftArmPivot.rotation.y, this.leftArmPivot.rotation.z],
-			[this.rightArmPivot.rotation.x, this.rightArmPivot.rotation.y, this.rightArmPivot.rotation.z],
-			[this.leftLegPivot.rotation.x, this.leftLegPivot.rotation.y, this.leftLegPivot.rotation.z],
-			[this.rightLegPivot.rotation.x, this.rightLegPivot.rotation.y, this.rightLegPivot.rotation.z]
+			[this.player.quaternion.x, this.player.quaternion.y, this.player.quaternion.z, this.player.quaternion.w],
+			[this.leftArmPivot.quaternion.x, this.leftArmPivot.quaternion.y, this.leftArmPivot.quaternion.z, this.leftArmPivot.quaternion.w],
+			[this.rightArmPivot.quaternion.x, this.rightArmPivot.quaternion.y, this.rightArmPivot.quaternion.z, this.rightArmPivot.quaternion.w],
+			[this.leftLegPivot.quaternion.x, this.leftLegPivot.quaternion.y, this.leftLegPivot.quaternion.z, this.leftLegPivot.quaternion.w],
+			[this.rightLegPivot.quaternion.x, this.rightLegPivot.quaternion.y, this.rightLegPivot.quaternion.z, this.rightLegPivot.quaternion.w]
 		];
 	}
 

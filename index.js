@@ -46,19 +46,19 @@ io.on('connection', client => {
     color: [0, 0, 0],
     player: {
       position: [0, 0, 0],
-      rotation: [0, 0, 0]
+      quaternion: [0, 0, 0, 0]
     },
     leftArmPivot: {
-      rotation: [0, 0, 0]
+      quaternion: [0, 0, 0, 0]
     },
     rightArmPivot: {
-      rotation: [0, 0, 0]
+      quaternion: [0, 0, 0, 0]
     },
     leftLegPivot: {
-      rotation: [0, 0, 0]
+      quaternion: [0, 0, 0, 0]
     },
     rightLegPivot: {
-      rotation: [0, 0, 0]
+      quaternion: [0, 0, 0, 0]
     }
   }
 
@@ -83,11 +83,11 @@ io.on('connection', client => {
   client.on('move', (data) => {
     if (clients[client.id]) {
       clients[client.id].player.position = data[0];
-      clients[client.id].player.rotation = data[1];
-      clients[client.id].leftArmPivot.rotation = data[2];
-      clients[client.id].rightArmPivot.rotation = data[3];
-      clients[client.id].leftLegPivot.rotation = data[4];
-      clients[client.id].rightLegPivot.rotation = data[5];
+      clients[client.id].player.quaternion = data[1];
+      clients[client.id].leftArmPivot.quaternion = data[2];
+      clients[client.id].rightArmPivot.quaternion = data[3];
+      clients[client.id].leftLegPivot.quaternion = data[4];
+      clients[client.id].rightLegPivot.quaternion = data[5];
     }
     client.emit('userMoves', clients); // send back to the sender
   });
