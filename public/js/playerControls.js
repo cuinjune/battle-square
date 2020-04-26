@@ -30,7 +30,7 @@ THREE.PlayerControls = function () {
                 break;
             case 39: // right
             case 68: // d
-                this.position.x = stepAmount * 0.5;
+                this.position.x = stepAmount;
                 break;
             case 32: // space
                 if (!this.shouldJump) {
