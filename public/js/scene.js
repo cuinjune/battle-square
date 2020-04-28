@@ -213,12 +213,14 @@ class Scene {
 
 	removeClient(_id) {
 		// remove player from scene
-		this.scene.remove(clients[_id].player);
+		if (clients[_id]) {
+			this.scene.remove(clients[_id].player);
+		}
 	}
 
 	updateClientMoves(_clientProps) {
 		for (let _id in _clientProps) {
-			if (_id != id) {
+			if (_id != id && clients[_id]) {
 				const lerpAmount = 0.5;
 				const playerPosition = new THREE.Vector3().fromArray(_clientProps[_id].player.position);
 				const playerQuaternion = new THREE.Quaternion().fromArray(_clientProps[_id].player.quaternion);
