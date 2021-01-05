@@ -50,4 +50,4 @@ Three.js, Socket.io, Seedrandom.js, Node.js, Express.js
 Please post an [issue](https://github.com/cuinjune/battle-square/issues) if you face any problem using the app.
 
 ## Author
-* [Zack Lee](https://www.cuinjune.com/about): an MPS Candidate at [NYU ITP](https://itp.nyu.edu).
+* [Zack Lee](https://www.cuinjune.com/about): MPS Candidate at [NYU ITP](https://itp.nyu.edu).
