@@ -390,9 +390,10 @@ class Scene {
 
 		if (this.frameCount % 25 === 0) {
 			this.updateClientVolumes();
-			// send movement to server to update clients data (calls back updateClientMoves)
-			this.socket.emit('move', this.getPlayerMove());
 		}
+		// send movement to server to update clients data (calls back updateClientMoves)
+		this.socket.emit('move', this.getPlayerMove());
+
 		// render
 		this.renderer.render(this.scene, this.camera);
 
