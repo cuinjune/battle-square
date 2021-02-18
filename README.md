@@ -1,11 +1,13 @@
 # Battle Square
-<img src="screenshot.png" alt="Screenshot" width="1000"/>
+<img src="screenshot1.png" alt="Screenshot1" width="1000"/>
+
+<img src="screenshot2.png" alt="Screenshot2" width="1000"/>
 
 Battle Square is a third-person 3D multiplayer battle game. (in progress) 
 
 The goal is to build a simple, minimal, and fun game that anyone can easily play in the web browser.
 
-Here's the [Live Demo on Glitch](https://cuinjune-battle-square.glitch.me/).
+Here's the [Live Demo on Heroku](https://battlesquare.herokuapp.com/).
 
 ## How to play
 * Enter the player name and press the start button. (The player's look will be determined by the name you give to it)
@@ -39,7 +41,7 @@ npm start
 3. Open your web browser and navigate to http://localhost:3000
 
 ## Tools & Libraries used
-Three.js, Socket.io, Seedrandom.js, Node.js, Express.js
+Three.js, Socket.io, WebRTC, Node.js, Express.js
 
 ## References
 * https://github.com/AidanNelson/threejs-webrtc
