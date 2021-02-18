@@ -54,6 +54,7 @@ class Scene {
 		this.socket.emit('look', this.getPlayerLook());
 
 		// Start the loop
+		this.frameCount = 0;
 		this.update(0);
 	}
 
@@ -70,8 +71,8 @@ class Scene {
 		const bodyHeightHalf = bodyHeight * 0.5;
 
 		// headSize
-		const headWidth = obj.headSize.x;
-		const headHeight = obj.headSize.y;
+		const headWidth = obj.headSize.x * 1.3333333;
+		const headHeight = obj.headSize.x;
 		const headDepth = obj.headSize.z;
 		const headHeightHalf = headHeight * 0.5;
 
@@ -98,7 +99,7 @@ class Scene {
 		const body = new THREE.Mesh(new THREE.CubeGeometry(bodyWidth, bodyHeight, bodyDepth), playerMaterial);
 
 		// head
-		const head = new THREE.Mesh(new THREE.CubeGeometry(headWidth, headHeight, headDepth), playerMaterial);
+		const head = new THREE.Mesh(new THREE.CubeGeometry(headWidth, headHeight, headDepth), obj.videoMaterial);
 		head.position.y = bodyHeightHalf + headHeightHalf;
 		body.add(head);
 
@@ -187,12 +188,17 @@ class Scene {
 		const colorB = this.getRandomRange(0.5, 1);
 
 		// add player
-		this.bodySize = new THREE.Vector3(bodyWidth, bodyHeight, bodyDepth)
-		this.headSize = new THREE.Vector3(headWidth, headHeight, headDepth)
-		this.armSize = new THREE.Vector3(armWidth, armHeight, armDepth)
-		this.legSize = new THREE.Vector3(legWidth, legHeight, legDepth)
-		this.color = new THREE.Color(colorR, colorG, colorB)
+		this.bodySize = new THREE.Vector3(bodyWidth, bodyHeight, bodyDepth);
+		this.headSize = new THREE.Vector3(headWidth, headHeight, headDepth);
+		this.armSize = new THREE.Vector3(armWidth, armHeight, armDepth);
+		this.legSize = new THREE.Vector3(legWidth, legHeight, legDepth);
+		this.color = new THREE.Color(colorR, colorG, colorB);
+		this.videoMaterial = makeVideoMaterial("local");
 		this.addPlayer(this);
+
+		// create an AudioListener and add it to the camera
+		this.listener = new THREE.AudioListener();
+		this.player.add(this.listener);
 	}
 
 	addClient(_clientProp, _id) {
@@ -201,7 +207,8 @@ class Scene {
 			headSize: new THREE.Vector3().fromArray(_clientProp.headSize),
 			armSize: new THREE.Vector3().fromArray(_clientProp.armSize),
 			legSize: new THREE.Vector3().fromArray(_clientProp.legSize),
-			color: new THREE.Color().fromArray(_clientProp.color)
+			color: new THREE.Color().fromArray(_clientProp.color),
+			videoMaterial: makeVideoMaterial(_id)
 		};
 		this.addPlayer(obj);
 		clients[_id].player = obj.player;
@@ -234,6 +241,27 @@ class Scene {
 				clients[_id].rightArmPivot.quaternion.slerp(rightArmPivotQuaternion, lerpAmount);
 				clients[_id].leftLegPivot.quaternion.slerp(leftLegPivotQuaternion, lerpAmount);
 				clients[_id].rightLegPivot.quaternion.slerp(rightLegPivotQuaternion, lerpAmount);
+			}
+		}
+	}
+
+	updateClientVolumes() {
+		for (let _id in clients) {
+			let audioEl = document.getElementById(_id + "_audio");
+			if (audioEl) {
+				let distSquared = this.camera.position.distanceToSquared(
+					clients[_id].player.position
+				);
+
+				if (distSquared > 500) {
+					// console.log('setting vol to 0')
+					audioEl.volume = 0;
+				} else {
+					// from lucasio here: https://discourse.threejs.org/t/positionalaudio-setmediastreamsource-with-webrtc-question-not-hearing-any-sound/14301/29
+					let volume = Math.min(1, 10 / distSquared);
+					audioEl.volume = volume;
+					// console.log('setting vol to',volume)
+				}
 			}
 		}
 	}
@@ -338,7 +366,7 @@ class Scene {
 	updateCamera() {
 		// offset from camera to player
 		const mousePositionY = this.controls.rotation.x + 0.5; //normalized to 0 ~ 1
-		const relativeCameraOffset = new THREE.Vector3(0, mousePositionY * 1.5 - 0.5, 0.75);
+		const relativeCameraOffset = new THREE.Vector3(0, mousePositionY * 1.5 - 0.5, 0.65);
 
 		// update player world matrix for perfect camera follow
 		this.player.updateMatrixWorld();
@@ -352,19 +380,41 @@ class Scene {
 	}
 
 	update(time) {
+		this.frameCount++;
+
 		// update player
 		this.updatePlayer(time);
 
 		// update camera
 		this.updateCamera();
 
-		// send movement to server to update clients data (calls back updateClientMoves)
-		this.socket.emit('move', this.getPlayerMove());
-
+		if (this.frameCount % 25 === 0) {
+			this.updateClientVolumes();
+			// send movement to server to update clients data (calls back updateClientMoves)
+			this.socket.emit('move', this.getPlayerMove());
+		}
 		// render
 		this.renderer.render(this.scene, this.camera);
 
 		// call update again
 		requestAnimationFrame((time) => this.update(time));
 	}
+}
+
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+// Utilities
+
+function makeVideoMaterial(_id) {
+	let videoElement = document.getElementById(_id + "_video");
+	let videoTexture = new THREE.VideoTexture(videoElement);
+
+	let videoMaterial = new THREE.MeshBasicMaterial({
+		map: videoTexture,
+		overdraw: true,
+		side: THREE.DoubleSide,
+	});
+
+	return videoMaterial;
 }

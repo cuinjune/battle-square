@@ -31,6 +31,16 @@ const io = require('socket.io')({
   // "polling duration": 0
 }).listen(server);
 
+// Network Traversal
+// Could also use network traversal service here (Twilio, for example):
+let iceServers = [
+  { url: "stun:stun.l.google.com:19302" },
+  { url: "stun:stun1.l.google.com:19302" },
+  { url: "stun:stun2.l.google.com:19302" },
+  { url: "stun:stun3.l.google.com:19302" },
+  { url: "stun:stun4.l.google.com:19302" },
+];
+
 let clients = {};
 
 // socket setup
@@ -65,7 +75,7 @@ io.on('connection', client => {
   // SENDERS (client.emit(): sending to sender-client only, io.sockets.emit(): send to all connected clients)
 
   // make sure to send clients, his ID, and a list of all keys
-  client.emit('introduction', clients, client.id, Object.keys(clients));
+  client.emit('introduction', clients, client.id, Object.keys(clients), iceServers);
 
   // RECEIVERS
   client.on('look', (data) => {
@@ -97,5 +107,32 @@ io.on('connection', client => {
     delete clients[client.id];
     io.sockets.emit('userDisconnected', client.id);
     console.log('User ' + client.id + ' diconnected, there are ' + io.engine.clientsCount + ' clients connected');
+  });
+
+  // from simple chat app:
+  // WEBRTC Communications
+  client.on("call-user", (data) => {
+    console.log(
+      "Server forwarding call from " + client.id + " to " + data.to
+    );
+    client.to(data.to).emit("call-made", {
+      offer: data.offer,
+      socket: client.id,
+    });
+  });
+
+  client.on("make-answer", (data) => {
+    client.to(data.to).emit("answer-made", {
+      socket: client.id,
+      answer: data.answer,
+    });
+  });
+
+  // ICE Setup
+  client.on("addIceCandidate", (data) => {
+    client.to(data.to).emit("iceCandidateFound", {
+      socket: client.id,
+      candidate: data.candidate,
+    });
   });
 });
